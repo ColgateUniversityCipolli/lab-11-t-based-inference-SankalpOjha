@@ -41,6 +41,16 @@ conduct a power analysis. How many observations would the researchers
 need to detect a moderate-to-large effect ($d=0.65$) when using 
 $\alpha=0.05$ and default power (0.80) for a two-sided one sample 
 $t$ test.
+
+<<>>=
+library(pwr)
+
+alpha = 0.05
+
+pwr.testing <- pwr.t.test(d=0.65, sig.level = alpha, power = 0.80, 
+                          type = "one.sample", alternative = "two.sided")
+(pwr.testing$n)
+@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % COLLECT DATA
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -50,6 +60,21 @@ do to collect the data for Figure 2(g). Note that you only need the
 \texttt{closer\_vals} and \texttt{further\_vals}. Ensure to 
 \texttt{mutate()} the data to get a difference 
 (e.g., \texttt{closer\_vals - further\_vals}).
+
+<<>>=
+library(xtable)
+library(tidyverse)
+
+closer.vals <- read_csv("Closer_vals.csv")
+
+farther.vals <- read_csv("Farther_vals.csv")
+
+figure2G.data <- tibble(closer_vals = closer.vals$closer_vals,
+                    farther_vals = farther.vals$farther_vals) |>
+  mutate(difference = closer_vals - farther_vals)
+
+xtable(figure2G.data)
+@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % SUMMARIZE DATA
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
