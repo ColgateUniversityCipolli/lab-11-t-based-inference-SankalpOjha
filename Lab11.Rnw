@@ -16,6 +16,9 @@
 \begin{document}
 <<echo=F, message=F, warning=F>>=
 library(tidyverse)
+library(pwr)
+library(xtable)
+library(e1071)
 @
 
 \cite{Kasdin25} show that dopamine in the brains of young zebra finches acts as 
@@ -51,6 +54,8 @@ pwr.testing <- pwr.t.test(d=0.65, sig.level = alpha, power = 0.80,
                           type = "one.sample", alternative = "two.sided")
 (pwr.testing$n)
 @
+
+\textbf{Solution:} The number of observations needed to achieve the defined parameters is $n = 20.58039$. To obtain this value of $n$, I used the \texttt{pwr.t.test} function from the \textbf{R pwr} package. I was able to plug in all the given parameters into this function to calculate the number of observations needed.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % COLLECT DATA
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -61,7 +66,7 @@ do to collect the data for Figure 2(g). Note that you only need the
 \texttt{mutate()} the data to get a difference 
 (e.g., \texttt{closer\_vals - further\_vals}).
 
-<<>>=
+<<message=FALSE, warning=FALSE, results=F>>=
 library(xtable)
 library(tidyverse)
 
@@ -69,12 +74,53 @@ closer.vals <- read_csv("Closer_vals.csv")
 
 farther.vals <- read_csv("Farther_vals.csv")
 
-figure2G.data <- tibble(closer_vals = closer.vals$closer_vals,
-                    farther_vals = farther.vals$farther_vals) |>
+figure2G.data <- tibble(closer_vals = closer.vals$Closer_vals,
+                    farther_vals = farther.vals$Farther_vals) |>
   mutate(difference = closer_vals - farther_vals)
 
 xtable(figure2G.data)
 @
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{rrrr}
+\hline
+observation & closer\_vals & farther\_vals & difference \\
+\hline
+1 & 0.28 & -0.19 & 0.47 \\
+2 & 0.08 & -0.03 & 0.11 \\
+3 & 0.13 & -0.19 & 0.32 \\
+4 & 0.04 & -0.07 & 0.11 \\
+5 & 0.15 & -0.09 & 0.23 \\
+6 & 0.20 & -0.16 & 0.36 \\
+7 & 0.16 & -0.31 & 0.47 \\
+8 & 0.18 & -0.16 & 0.34 \\
+9 & 0.13 & -0.13 & 0.26 \\
+10 & 0.10 & -0.05 & 0.15 \\
+11 & 0.33 & -0.60 & 0.93 \\
+12 & 0.17 & -0.24 & 0.41 \\
+13 & 0.07 & -0.12 & 0.20 \\
+14 & 0.00 & -0.13 & 0.13 \\
+15 & 0.00 & -0.04 & 0.04 \\
+16 & 0.09 & -0.24 & 0.33 \\
+17 & 0.26 & -0.34 & 0.61 \\
+18 & 0.28 & -0.31 & 0.59 \\
+19 & 0.07 & -0.18 & 0.25 \\
+20 & 0.15 & -0.07 & 0.23 \\
+21 & 0.27 & -0.34 & 0.61 \\
+22 & 0.15 & -0.19 & 0.34 \\
+23 & 0.10 & -0.20 & 0.30 \\
+24 & 0.19 & -0.31 & 0.50 \\
+25 & 0.34 & -0.35 & 0.69 \\
+\hline
+\end{tabular}
+\caption{Table of \texttt{closer\_vals}, \texttt{farther\_vals}, and \texttt{difference} for each observation.}
+\label{table1}
+\end{table}
+
+\textbf{Information:} This information was tablulated through the \textbf{R xtable} package.
+\newpage
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % SUMMARIZE DATA
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -83,16 +129,97 @@ xtable(figure2G.data)
   \item Summarize the further data. Do the data suggest that
    dopamine in the brains of young zebra finches decreases when
    they sing further away?
+<<results=F, message=FALSE, warning=FALSE>>=
+farther.summary <- summarize(figure2G.data,
+                            mean = mean(farther_vals),
+                            variance = var(farther_vals),
+                            median = median(farther_vals),
+                            IQR = IQR(farther_vals),
+                            skew = skewness(farther_vals),
+                            e.kurt = kurtosis(farther_vals),
+                            min = min(farther_vals),
+                            max = max(farther_vals))
+xtable(farther.summary)
+@
+
+As can be seen in Table 2, both the mean and median statistics are negative which suggests that as young zebra finches are further away from the adult songs they experience a decrease in dopamine levels. Both the minimum and maximum values being negative also suggests that in all cases young zebra finches experience a decrease in dopamine levels.
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{rrrrrrrrr}
+  \hline
+mean & variance & median & IQR & skew & e.kurt & min & max \\ 
+  \hline
+-0.20 & 0.02 & -0.19 & 0.19 & -1.04 & 1.19 & -0.60 & -0.03 \\ 
+   \hline
+\end{tabular}
+\caption{Summary Statistics Regarding Farther Data.}
+\label{table2}
+\end{table}
+
    \item Summarize the closer data. Do the data suggest that
    dopamine in the brains of young zebra finches increases when
    they sing closer to their adult song?
+
+<<results=F, message=FALSE, warning=FALSE>>=
+closer.summary <- summarize(figure2G.data,
+                             mean = mean(closer_vals),
+                             variance = var(closer_vals),
+                             median = median(closer_vals),
+                             IQR = IQR(closer_vals),
+                             skew = skewness(closer_vals),
+                             e.kurt = kurtosis(closer_vals),
+                             min = min(closer_vals),
+                             max = max(closer_vals))
+xtable(closer.summary)
+@
+
+As can be seen in Table 3, both the mean and median statistics are positive which suggests that as young zebra finches are closer to the adult songs they experience an increase in dopamine levels. The minimum and maximum values also supplement the idea that as young zebra finches sing closer to the adult songs they experience an increase in dopamine levels because both statistics are postive.
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{rrrrrrrrr}
+  \hline
+mean & variance & median & IQR & skew & e.kurt & min & max \\ 
+  \hline
+0.16 & 0.01 & 0.15 & 0.11 & 0.30 & -0.86 & 0.00 & 0.34 \\ 
+   \hline
+\end{tabular}
+\caption{Summary Statistics Regarding Closer Data.}
+\label{table3}
+\end{table}
+
   \item Summarize the paired differences. Do the data suggest
   that there is a difference between dopamine in the brains of
   young zebra finches when they sing further away compared to 
   closer to their adult song?
-  \item \textbf{Optional Challenge:} Can you reproduce Figure 2(g)?
-  Note that the you can use \texttt{geom\_errorbar()} to plot
-  the range created by adding the mean $\pm$ one standard deviation.
+
+<<results=F, message=FALSE, warning=FALSE>>=
+difference.summary <- summarize(figure2G.data,
+                            mean = mean(difference),
+                            variance = var(difference),
+                            median = median(difference),
+                            IQR = IQR(difference),
+                            skew = skewness(difference),
+                            e.kurt = kurtosis(difference),
+                            min = min(difference),
+                            max = max(difference))
+xtable(difference.summary)
+@
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{rrrrrrrrr}
+  \hline
+mean & variance & median & IQR & skew & e.kurt & min & max \\ 
+  \hline
+0.36 & 0.04 & 0.33 & 0.24 & 0.77 & 0.13 & 0.04 & 0.93 \\ 
+   \hline
+\end{tabular}
+\caption{Summary Statistics Regarding The Difference Between Closer Data and Farther Data.}
+\label{table4}
+\end{table}
+
 \end{enumerate}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % CONDUCT THE TESTS
