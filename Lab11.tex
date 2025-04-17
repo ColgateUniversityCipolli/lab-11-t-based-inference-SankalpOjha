@@ -299,7 +299,111 @@ like: ($t=23.99$, $p<0.0001$; $g=1.34$; 95\% CI: 4.43, 4.60).\\
 correction of their $p$-values. I'm waiting to hear back from them via email!
 \begin{enumerate}
   \item ``The close responses differed significantly from 0 ($p=1.63 \times 10^{-8}$).''
+  
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hldef{mu0} \hlkwb{<-} \hlnum{0}
+\hldef{x.close} \hlkwb{<-} \hldef{figure2G.data}\hlopt{$}\hldef{closer_vals}
+
+\hlkwd{hedges_g}\hldef{(}\hlkwc{x} \hldef{= x.close,} \hlkwc{mu} \hldef{= mu0,} \hlkwc{alternative} \hldef{=} \hlsng{"greater"}\hldef{)}
+\end{alltt}
+\begin{verbatim}
+## Hedges' g |      95% CI
+## -----------------------
+## 1.61      | [1.10, Inf]
+## 
+## - One-sided CIs: upper bound fixed at [Inf].
+\end{verbatim}
+\begin{alltt}
+\hlkwd{interpret_hedges_g}\hldef{(}\hlnum{1.61}\hldef{)}
+\end{alltt}
+\begin{verbatim}
+## [1] "large"
+## (Rules: cohen1988)
+\end{verbatim}
+\begin{alltt}
+\hlkwd{t.test}\hldef{(}\hlkwc{x} \hldef{= x.close,} \hlkwc{mu} \hldef{= mu0,} \hlkwc{alternative} \hldef{=} \hlsng{"greater"}\hldef{)}
+\end{alltt}
+\begin{verbatim}
+## 
+## 	One Sample t-test
+## 
+## data:  x.close
+## t = 8.3024, df = 24, p-value = 8.132e-09
+## alternative hypothesis: true mean is greater than 0
+## 95 percent confidence interval:
+##  0.1240301       Inf
+## sample estimates:
+## mean of x 
+## 0.1562231
+\end{verbatim}
+\begin{alltt}
+\hldef{(CI.upper} \hlkwb{<-} \hlkwd{t.test}\hldef{(}\hlkwc{x} \hldef{= x.close,}
+                    \hlkwc{mu} \hldef{= mu0,}
+                    \hlkwc{alternative} \hldef{=} \hlsng{"two.sided"}\hldef{)}\hlopt{$}\hldef{conf.int[}\hlnum{2}\hldef{])}
+\end{alltt}
+\begin{verbatim}
+## [1] 0.1950586
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+($t=8.3024$, $p<0.0001$; $g=1.61$; 95\% CI: 0.1240, 0.1951)
+  
   \item ``The far responses differed significantly from 0 ($p=5.17 \times 10^{-8}$).''
+  
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hldef{mu0} \hlkwb{<-} \hlnum{0}
+\hldef{x.far} \hlkwb{<-} \hldef{figure2G.data}\hlopt{$}\hldef{farther_vals}
+
+\hlkwd{hedges_g}\hldef{(}\hlkwc{x} \hldef{= x.far,} \hlkwc{mu} \hldef{= mu0,} \hlkwc{alternative} \hldef{=} \hlsng{"less"}\hldef{)}
+\end{alltt}
+\begin{verbatim}
+## Hedges' g |        95% CI
+## -------------------------
+## -1.51     | [-Inf, -1.02]
+## 
+## - One-sided CIs: lower bound fixed at [-Inf].
+\end{verbatim}
+\begin{alltt}
+\hlkwd{interpret_hedges_g}\hldef{(}\hlopt{-}\hlnum{1.51}\hldef{)}
+\end{alltt}
+\begin{verbatim}
+## [1] "large"
+## (Rules: cohen1988)
+\end{verbatim}
+\begin{alltt}
+\hlkwd{t.test}\hldef{(}\hlkwc{x} \hldef{= x.far,} \hlkwc{mu} \hldef{= mu0,} \hlkwc{alternative} \hldef{=} \hlsng{"less"}\hldef{)}
+\end{alltt}
+\begin{verbatim}
+## 
+## 	One Sample t-test
+## 
+## data:  x.far
+## t = -7.778, df = 24, p-value = 2.587e-08
+## alternative hypothesis: true mean is less than 0
+## 95 percent confidence interval:
+##        -Inf -0.1581322
+## sample estimates:
+##  mean of x 
+## -0.2027244
+\end{verbatim}
+\begin{alltt}
+\hldef{(CI.lower} \hlkwb{<-} \hlkwd{t.test}\hldef{(}\hlkwc{x} \hldef{= x.far,}
+                    \hlkwc{mu} \hldef{= mu0,}
+                    \hlkwc{alternative} \hldef{=} \hlsng{"two.sided"}\hldef{)}\hlopt{$}\hldef{conf.int[}\hlnum{1}\hldef{])}
+\end{alltt}
+\begin{verbatim}
+## [1] -0.2565176
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+($t=-7.778$, $p<0.0001$; $g=-1.51$; 95\% CI: -0.2565, -0.1581)
+
   \item ``The difference between populations was significant ($p=1.04 \times10^{-8}$).''
 \end{enumerate}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
