@@ -107,7 +107,7 @@ $t$ test.
 \end{kframe}
 \end{knitrout}
 
-\textbf{Solution:} The number of observations needed to achieve the defined parameters is $n = 20.58039$. To obtain this value of $n$, I used the \texttt{pwr.t.test} function from the \textbf{R pwr} package. I was able to plug in all the given parameters into this function to calculate the number of observations needed.
+\textbf{Solution:} The number of observations needed to achieve the defined parameters is $n = 20.58039$. To obtain this value of $n$, I used the \verb|pwr.t.test()| function from the \textbf{pwr} package. I was able to plug in all the given parameters into this function to calculate the number of observations needed.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % COLLECT DATA
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -297,6 +297,9 @@ a little more comprehensively -- that is your parenthetical should look somethin
 like: ($t=23.99$, $p<0.0001$; $g=1.34$; 95\% CI: 4.43, 4.60).\\
 \textbf{Note:} Your numbers may vary slightly as they performed some unclear
 correction of their $p$-values. I'm waiting to hear back from them via email!
+
+\textbf{NOTE:} To accomplish the tasks in part 4, we used the \verb|hedges_g(), t.test(), and interpret_hedges_g()| from the \texttt{effectsize} \citep(effectsize) package.
+
 \begin{enumerate}
   \item ``The close responses differed significantly from 0 ($p=1.63 \times 10^{-8}$).''
   
@@ -349,7 +352,7 @@ correction of their $p$-values. I'm waiting to hear back from them via email!
 \end{kframe}
 \end{knitrout}
 
-($t=8.3024$, $p<0.0001$; $g=1.61$; 95\% CI: 0.1240, 0.1951)
+\textbf{Solution:} ($t=8.3024$, $p<0.0001$; $g=1.61$; 95\% CI: 0.1240, 0.1951)
   
   \item ``The far responses differed significantly from 0 ($p=5.17 \times 10^{-8}$).''
   
@@ -402,9 +405,50 @@ correction of their $p$-values. I'm waiting to hear back from them via email!
 \end{kframe}
 \end{knitrout}
 
-($t=-7.778$, $p<0.0001$; $g=-1.51$; 95\% CI: -0.2565, -0.1581)
+\textbf{Solution:} ($t=-7.778$, $p<0.0001$; $g=-1.51$; 95\% CI: -0.2565, -0.1581)
 
   \item ``The difference between populations was significant ($p=1.04 \times10^{-8}$).''
+  
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hldef{mu0} \hlkwb{<-} \hlnum{0}
+\hldef{x.difference} \hlkwb{<-} \hldef{figure2G.data}\hlopt{$}\hldef{difference}
+
+\hlkwd{hedges_g}\hldef{(}\hlkwc{x} \hldef{= x.difference,} \hlkwc{mu} \hldef{= mu0,} \hlkwc{alternative} \hldef{=} \hlsng{"two.sided"}\hldef{)}
+\end{alltt}
+\begin{verbatim}
+## Hedges' g |       95% CI
+## ------------------------
+## 1.65      | [1.04, 2.24]
+\end{verbatim}
+\begin{alltt}
+\hlkwd{interpret_hedges_g}\hldef{(}\hlnum{1.65}\hldef{)}
+\end{alltt}
+\begin{verbatim}
+## [1] "large"
+## (Rules: cohen1988)
+\end{verbatim}
+\begin{alltt}
+\hlkwd{t.test}\hldef{(}\hlkwc{x}\hldef{=x.difference,} \hlkwc{mu} \hldef{= mu0,} \hlkwc{alternative} \hldef{=} \hlsng{"two.sided"}\hldef{)}
+\end{alltt}
+\begin{verbatim}
+## 
+## 	One Sample t-test
+## 
+## data:  x.difference
+## t = 8.5109, df = 24, p-value = 1.037e-08
+## alternative hypothesis: true mean is not equal to 0
+## 95 percent confidence interval:
+##  0.2719028 0.4459921
+## sample estimates:
+## mean of x 
+## 0.3589475
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+\textbf{Solution:} ($t=8.5109$, $p<0.0001$; $g=1.65$; 95\% CI: 0.272, 0.446)
 \end{enumerate}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % CONDUCT THE TESTS
@@ -413,8 +457,29 @@ correction of their $p$-values. I'm waiting to hear back from them via email!
 hypothesis testing plots for each part of the previous question.
 \begin{enumerate}
   \item Question 4, part(a).
+\begin{figure}[H]
+\centering
+\includegraphics[width=10cm, height=8.5cm]{Rplot.pdf}
+\caption{A figure for T-Test for Dopamine in a Closer Response.}
+\label{plot1}
+\end{figure}
+
   \item Question 4, part(b).
+\begin{figure}[H]
+\centering
+\includegraphics[width=10cm, height=8.5cm]{Rplot01.pdf}
+\caption{A figure for T-Test for Dopamine in a Further Response.}
+\label{plot2}
+\end{figure}
+
   \item Question 4, part(c).
+\begin{figure}[H]
+\centering
+\includegraphics[width=10cm, height=8.5cm]{Rplot02.pdf}
+\caption{A figure for T-Test for Dopamine Between Populations.}
+\label{plot3}
+\end{figure}
+
 \end{enumerate}
 \end{enumerate}
 
